@@ -1,1 +1,1 @@
-web: gunicorn petcare.wsgi
+web: python -m gunicorn petcare.wsgi
