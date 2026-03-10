@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card p-4">
+            <h3 class="mb-4">Добавить запись — {{ pet.name }}</h3>
+            <form method="post">
+                {% csrf_token %}
+                {% for field in form %}
+                    <div class="mb-3" {% if field.name == 'value' %}id="weight-field" style="display:none"{% endif %}>
+                        <label class="form-label fw-semibold">{{ field.label }}</label>
+                        {{ field }}
+                        {% if field.errors %}
+                            <div class="text-danger small">{{ field.errors }}</div>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+                <button type="submit" class="btn btn-primary w-100">Сохранить</button>
+                <a href="{% url 'pet_detail' pet.pk %}" class="btn btn-outline-secondary w-100 mt-2">Отмена</a>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    // показываем поле веса только если выбрана категория "weight"
+    const categorySelect = document.querySelector('select[name="category"]');
+    const weightField = document.getElementById('weight-field');
+
+    function toggleWeight() {
+        weightField.style.display = categorySelect.value === 'weight' ? 'block' : 'none';
+    }
+
+    categorySelect.addEventListener('change', toggleWeight);
+    toggleWeight(); // при загрузке страницы
+</script>
+{% endblock %}

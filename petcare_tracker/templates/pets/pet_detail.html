@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="page-header">
+    <div>
+        <div class="page-title">{{ pet.name }}</div>
+        <div class="page-subtitle">{{ pet.get_species_display }} · Дата рождения: {{ pet.birth_date }}</div>
+    </div>
+    <a href="{% url 'pet_list' %}" class="btn-secondary-custom">← Назад</a>
+</div>
+
+<div style="display:grid; grid-template-columns:280px 1fr; gap:20px;">
+    <!-- Левая колонка -->
+    <div>
+        <div class="card-dark" style="text-align:center; margin-bottom:16px;">
+            {% if pet.photo %}
+                <img src="{{ pet.photo.url }}" style="width:100%; height:200px; object-fit:cover; border-radius:10px; margin-bottom:16px;">
+            {% else %}
+                <div style="font-size:72px; margin-bottom:12px;">
+                    {% if pet.species == 'dog' %}🐶
+                    {% elif pet.species == 'cat' %}🐱
+                    {% elif pet.species == 'bird' %}🐦
+                    {% else %}🐾{% endif %}
+                </div>
+            {% endif %}
+            <div style="font-size:18px; font-weight:700; color:#fff;">{{ pet.name }}</div>
+            <div style="font-size:12px; color:#555568; margin-top:4px;">{{ pet.get_species_display }}</div>
+        </div>
+
+        <div class="card-dark">
+            <div class="card-label">Добавить запись</div>
+            {% if pet.species == 'dog' %}
+                <a href="{% url 'habit_add' pet.pk %}?cat=feeding" class="action-btn">🍖 Кормление</a>
+                <a href="{% url 'habit_add' pet.pk %}?cat=walk" class="action-btn">🦮 Прогулка</a>
+                <a href="{% url 'habit_add' pet.pk %}?cat=vet" class="action-btn">🏥 Ветеринар</a>
+                <a href="{% url 'habit_add' pet.pk %}?cat=medicine" class="action-btn">💊 Лекарства</a>
+                <a href="{% url 'habit_add' pet.pk %}?cat=weight" class="action-btn">⚖️ Вес</a>
+                <a href="{% url 'habit_add' pet.pk %}?cat=grooming" class="action-btn">✂️ Груминг</a>
+                <a href="{% url 'reminder_add' pet.pk %}" class="action-btn" style="border-color:#f59e0b33; color:#f59e0b;">🔔 Напоминание</a>  ← ДОБАВЬ
+            {% elif pet.species == 'cat' %}
+                <a href="{% url 'habit_add' pet.pk %}?cat=feeding" class="action-btn">🐟 Кормление</a>
+                <a href="{% url 'habit_add' pet.pk %}?cat=grooming" class="action-btn">✂️ Груминг</a>
+                <a href="{% url 'habit_add' pet.pk %}?cat=vet" class="action-btn">🏥 Ветеринар</a>
+                <a href="{% url 'habit_add' pet.pk %}?cat=medicine" class="action-btn">💊 Лекарства</a>
+                <a href="{% url 'habit_add' pet.pk %}?cat=weight" class="action-btn">⚖️ Вес</a>
+                <a href="{% url 'reminder_add' pet.pk %}" class="action-btn" style="border-color:#f59e0b33; color:#f59e0b;">🔔 Напоминание</a>  ← ДОБАВЬ
+            {% elif pet.species == 'bird' %}
+                <a href="{% url 'habit_add' pet.pk %}?cat=feeding" class="action-btn">🌾 Кормление</a>
+                <a href="{% url 'habit_add' pet.pk %}?cat=grooming" class="action-btn">🪶 Уход</a>
+                <a href="{% url 'habit_add' pet.pk %}?cat=vet" class="action-btn">🏥 Ветеринар</a>
+                <a href="{% url 'habit_add' pet.pk %}?cat=medicine" class="action-btn">💊 Лекарства</a>
+                <a href="{% url 'reminder_add' pet.pk %}" class="action-btn" style="border-color:#f59e0b33; color:#f59e0b;">🔔 Напоминание</a>  ← ДОБАВЬ
+            {% else %}
+                <a href="{% url 'habit_add' pet.pk %}?cat=feeding" class="action-btn">🍽️ Кормление</a>
+                <a href="{% url 'habit_add' pet.pk %}?cat=vet" class="action-btn">🏥 Ветеринар</a>
+                <a href="{% url 'reminder_add' pet.pk %}" class="action-btn" style="border-color:#f59e0b33; color:#f59e0b;">🔔 Напоминание</a>  ← ДОБАВЬ
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Правая колонка -->
+    <div class="card-dark">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+            <div class="card-label" style="margin-bottom:0;">История действий</div>
+            <span class="pet-badge">{{ logs.count }} записей</span>
+        </div>
+
+        {% if logs %}
+            {% for log in logs %}
+            <div class="log-item">
+                <div class="log-dot"></div>
+                <div style="flex:1;">
+                    <div style="display:flex; justify-content:space-between; align-items:center;">
+                        <span style="font-size:13px; font-weight:600; color:#e8e8f0;">{{ log.get_category_display }}</span>
+                        <span style="font-size:11px; color:#555568;">{{ log.logged_at|date:"d.m.Y H:i" }}</span>
+                    </div>
+                    {% if log.notes %}
+                        <div style="font-size:12px; color:#666680; margin-top:3px;">{{ log.notes }}</div>
+                    {% endif %}
+                    {% if log.value %}
+                        <div style="font-size:12px; color:#34d399; margin-top:3px;">⚖️ {{ log.value }} кг</div>
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+            <div style="text-align:center; padding:40px; color:#555568;">
+                <div style="font-size:36px; margin-bottom:12px;">📋</div>
+                <div style="font-size:13px;">Записей пока нет</div>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

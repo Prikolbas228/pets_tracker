@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="page-header">
+    <div>
+        <div class="page-title">Новая запись</div>
+        <div class="page-subtitle">Питомец: {{ pet.name }}</div>
+    </div>
+    <a href="{% url 'pet_list' %}" class="btn-secondary-custom">← Назад</a>
+
+</div>
+
+<div class="form-card" style="max-width:520px;">
+    <form method="post">
+        {% csrf_token %}
+        {% for field in form %}
+        <div class="form-group" {% if field.name == 'value' %}id="weight-field" style="display:none"{% endif %}>
+            <label>{{ field.label }}</label>
+            {{ field }}
+            {% if field.errors %}
+                <div class="form-error">{{ field.errors|join:", " }}</div>
+            {% endif %}
+        </div>
+        {% endfor %}
+        <button type="submit" class="btn-primary-custom" style="width:100%; justify-content:center; margin-top:8px;">
+            Сохранить запись
+        </button>
+    </form>
+</div>
+
+<script>
+    const categorySelect = document.querySelector('select[name="category"]');
+    const weightField = document.getElementById('weight-field');
+
+    // предзаполняем категорию из URL параметра
+    const urlParams = new URLSearchParams(window.location.search);
+    const cat = urlParams.get('cat');
+    if (cat && categorySelect) categorySelect.value = cat;
+
+    function toggleWeight() {
+        if (weightField) {
+            weightField.style.display = categorySelect.value === 'weight' ? 'block' : 'none';
+        }
+    }
+
+    if (categorySelect) {
+        categorySelect.addEventListener('change', toggleWeight);
+        toggleWeight();
+    }
+</script>
+{% endblock %}
