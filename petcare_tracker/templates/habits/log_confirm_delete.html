@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% block content %}
+<div style="display:flex; align-items:center; justify-content:center; min-height:60vh;">
+    <div class="form-card" style="text-align:center; max-width:400px;">
+        <div style="font-size:48px; margin-bottom:16px;">🗑️</div>
+        <h2 style="margin-bottom:8px;">Удалить запись?</h2>
+        <p style="color:#555568; font-size:13px; margin-bottom:24px;">
+            Запись <strong style="color:#e8e8f0;">{{ log.get_category_display }}</strong> будет удалена навсегда.
+        </p>
+        <form method="post" style="display:flex; gap:10px;">
+            {% csrf_token %}
+            <a href="{% url 'pet_detail' log.pet.pk %}" class="btn-secondary-custom" style="flex:1; justify-content:center;">Отмена</a>
+            <button type="submit" style="flex:1; background:#ef4444; border:none; border-radius:10px; padding:10px; color:#fff; font-size:13px; font-weight:600; cursor:pointer;">
+                Удалить
+            </button>
+        </form>
+    </div>
+</div>
+{% endblock %}
