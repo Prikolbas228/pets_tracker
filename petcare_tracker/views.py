@@ -101,3 +101,30 @@ def reminder_add(request, pet_pk):
     else:
         form = ReminderForm()
     return render(request, 'reminders/reminder_add.html', {'form': form, 'pet': pet})
+
+@login_required
+def remove_pet(request, pet_pk):
+    pet = get_object_or_404(Pet, pk=pet_pk, owner=request.user)
+    if request.method == 'POST':
+        pet.delete()
+        return redirect('pet_list')
+    return render(request, 'pets/pet_confirm_delete.html', {'pet': pet})
+
+
+@login_required
+def remove_log(request, log_pk):
+    log = get_object_or_404(HabitLog, pk=log_pk,  pet__owner=request.user)
+    if request.method == 'POST':
+        pet_pk = log.pet.pk  # ✅ правильно
+        log.delete()
+        return redirect('pet_detail',pk=pet_pk)
+    return render(request, 'habits/log_confirm_delete.html', {'log': log})
+
+
+@login_required
+def remove_reminder(request, reminder_pk):
+    reminder = get_object_or_404(Reminder, pk=reminder_pk, pet__owner=request.user)
+    if request.method == 'POST':
+        reminder.delete()
+        return redirect('reminder_list')
+    return render(request, 'reminders/reminder_confirm_delete.html', {'reminder': reminder})

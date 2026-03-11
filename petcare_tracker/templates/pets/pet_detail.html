@@ -65,14 +65,17 @@
         </div>
 
         {% if logs %}
-            {% for log in logs %}
-            <div class="log-item">
-                <div class="log-dot"></div>
-                <div style="flex:1;">
-                    <div style="display:flex; justify-content:space-between; align-items:center;">
-                        <span style="font-size:13px; font-weight:600; color:#e8e8f0;">{{ log.get_category_display }}</span>
+         {% for log in logs %}
+        <div class="log-item">
+            <div class="log-dot"></div>
+            <div style="flex:1;">
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <span style="font-size:13px; font-weight:600; color:#e8e8f0;">{{ log.get_category_display }}</span>
+                    <div style="display:flex; align-items:center; gap:8px;">
                         <span style="font-size:11px; color:#555568;">{{ log.logged_at|date:"d.m.Y H:i" }}</span>
+                        <a href="{% url 'remove_log' log.pk %}" style="color:#ef4444; font-size:11px; text-decoration:none;">✕</a>
                     </div>
+                </div>
                     {% if log.notes %}
                         <div style="font-size:12px; color:#666680; margin-top:3px;">{{ log.notes }}</div>
                     {% endif %}

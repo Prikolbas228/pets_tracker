@@ -18,4 +18,7 @@ urlpatterns = [
     #notification
     path('reminders/', views.reminder_list, name='reminder_list'),
     path('pets/<int:pet_pk>/reminder/add/', views.reminder_add, name='reminder_add'),
+    path('pets/<int:pet_pk>/delete/', views.remove_pet, name='remove_pet'),
+    path('logs/<int:log_pk>/delete/', views.remove_log, name='remove_log'),
+    path('reminders/<int:reminder_pk>/delete/', views.remove_reminder, name='remove_reminder'),
 ]
